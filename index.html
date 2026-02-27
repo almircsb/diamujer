@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>La Constelación de las Educadoras - La Salle Bolivia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #020617;
+            --bg-nebula: #0f172a;
+            --bg-accent: #1e1b4b;
+            --star-glow: rgba(180, 210, 255, 0.9);
+            --line-color: rgba(255, 255, 255, 0.12);
+            --gold-glow: rgba(212, 175, 55, 0.6);
+            --aurora-1: rgba(45, 212, 191, 0.08);
+            --aurora-2: rgba(99, 102, 241, 0.08);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at 50% 50%, var(--bg-nebula) 0%, var(--bg-deep) 100%);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        h1, h2, h3, .cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Capas de fondo Aurora Boreal */
+        .aurora-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .aurora {
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at center, var(--aurora-1) 0%, transparent 50%),
+                        radial-gradient(circle at 30% 20%, var(--aurora-2) 0%, transparent 40%);
+            filter: blur(60px);
+            animation: aurora-flow 30s infinite alternate linear;
+        }
+
+        @keyframes aurora-flow {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(5%, 5%) rotate(10deg); }
+        }
+
+        /* Luna en tránsito ultra fluido */
+        .moon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #f8fafc;
+            border-radius: 50%;
+            box-shadow: 0 0 30px 2px rgba(255, 255, 255, 0.15);
+            z-index: 1;
+            opacity: 0.5;
+            /* Posición inicial fuera de pantalla */
+            offset-path: path('M -100 200 Q 500 -50 1200 200');
+            animation: moon-travel 300s linear infinite;
+        }
+
+        @keyframes moon-travel {
+            from { offset-distance: 0%; }
+            to { offset-distance: 100%; }
+        }
+
+        .moon::after {
+            content: '';
+            position: absolute;
+            top: 0; right: -12px;
+            width: 60px; height: 60px;
+            background: var(--bg-nebula);
+            border-radius: 50%;
+            transform: scale(0.9) translate(-8px, -4px);
+        }
+
+        /* Capas de fondo */
+        #ambient-stars {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .tiny-star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.5); }
+            100% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Estrellas Fugaces */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(90deg, white, transparent);
+            box-shadow: 0 0 10px white;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .uni-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        #constellation-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5;
+            transition: filter 1s ease, opacity 1s ease;
+        }
+
+        .darken-back {
+            filter: blur(10px) brightness(0.2);
+            opacity: 0.3;
+        }
+
+        svg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
+        .constellation-line {
+            stroke: var(--line-color);
+            stroke-width: 1;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 3s ease-in-out;
+        }
+
+        .line-draw {
+            stroke-dashoffset: 0;
+        }
+
+        /* Estrellas Principales con zona de toque ampliada */
+        .star-hitbox {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 20;
+            transform: translate(-50%, -50%);
+        }
+
+        .main-star {
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 2px var(--star-glow);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            animation: main-twinkle 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes main-twinkle {
+            0% { box-shadow: 0 0 10px 1px var(--star-glow); transform: scale(1); }
+            100% { box-shadow: 0 0 20px 4px var(--star-glow); transform: scale(1.3); }
+        }
+
+        .main-star.special {
+            width: 14px;
+            height: 14px;
+            background: #fff8e1;
+            box-shadow: 0 0 25px 6px var(--gold-glow);
+            animation: special-twinkle 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes special-twinkle {
+            0% { box-shadow: 0 0 15px 3px var(--gold-glow); }
+            100% { box-shadow: 0 0 35px 10px var(--gold-glow); }
+        }
+
+        .visible {
+            opacity: 1 !important;
+        }
+
+        .star-label {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease 0.5s;
+            white-space: nowrap;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Narrativa Adaptable */
+        #narrative-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
+            pointer-events: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .narrative-text {
+            position: absolute;
+            opacity: 0;
+            transition: all 1.5s ease-in-out;
+            transform: translateY(15px);
+            background: rgba(2, 6, 23, 0.85);
+            padding: 20px 30px;
+            border-radius: 30px;
+            max-width: 90%;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+
+        @media (min-width: 768px) {
+            .narrative-text { font-size: 1.1rem; padding: 25px 45px; border-radius: 100px; }
+        }
+
+        .narrative-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mensaje Final */
+        #final-quote {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 85%;
+            max-width: 700px;
+            text-align: center;
+            opacity: 0;
+            transition: all 2.5s ease;
+            z-index: 60;
+            transform: translate(-50%, -45%);
+            pointer-events: none;
+        }
+
+        #final-quote.show {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Modal Mobile Optimized */
+        #paper-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            padding: 20px;
+        }
+
+        #paper-modal.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .paper-card {
+            background: #ffffff;
+            color: #0f172a;
+            padding: 2.5rem 1.5rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        #paper-modal.open .paper-card { 
+            transform: scale(1) translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 10px;
+            color: #94a3b8;
+        }
+
+        .author-tag {
+            margin-top: 1.5rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            color: #1e40af;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1rem;
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.55rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 2s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-container">
+        <div class="aurora"></div>
+    </div>
+
+    <div class="moon"></div>
+
+    <div id="ambient-stars"></div>
+
+    <div class="uni-logo">
+        <svg class="logo-symbol" viewBox="0 0 50 50" fill="none">
+            <path d="M25 5L31.5 18.5L46.5 20.5L35.5 30.5L38.5 45L25 38L11.5 45L14.5 30.5L3.5 20.5L18.5 18.5L25 5Z" stroke="#d4af37" stroke-width="1"/>
+            <path d="M25 15V30M20 25H30" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <span class="cinzel text-[7px] tracking-widest text-white/40">La Salle Bolivia</span>
+    </div>
+
+    <div id="narrative-overlay">
+        <h1 id="text-1" class="narrative-text cinzel text-white font-bold">
+            A las futuras maestras de La Salle...<br>
+            <span class="text-[10px] font-normal opacity-70 block mt-2">Sembrando semillas de eternidad.</span>
+        </h1>
+        <p id="text-2" class="narrative-text text-blue-100 italic">
+            En la Educación, formamos una<br>constelación de esperanza.
+        </p>
+        <p id="text-3" class="narrative-text text-blue-100">
+            Cada una de ustedes es una luz única.<br>
+            <span class="text-[10px] block mt-1">Cualidades con nombre propio.</span>
+        </p>
+        <p id="text-4" class="narrative-text text-white">
+            Ven en cada niño el milagro<br>
+            <span class="italic text-blue-300 font-bold">que puede llegar a ser.</span>
+        </p>
+    </div>
+
+    <div id="constellation-layer">
+        <svg id="constellation-svg"></svg>
+        <div id="stars-container"></div>
+    </div>
+
+    <div id="final-quote">
+        <p class="cinzel text-xl md:text-3xl text-white font-bold mb-4 px-4">
+            No es un día en el calendario.
+        </p>
+        <p class="text-blue-100 text-sm md:text-lg italic px-6 leading-relaxed">
+            "Es la luz silenciosa con la que tocan vidas,<br>
+            la paciencia que construye futuros."
+        </p>
+        <div class="mt-8 pt-6 border-t border-white/10">
+            <p class="cinzel text-xs text-white font-bold tracking-[0.4em]">INDIVISA MANENT</p>
+        </div>
+    </div>
+    
+    <div id="click-hint" class="click-hint">
+        Toca las estrellas para ver sus mensajes
+    </div>
+
+    <div id="paper-modal">
+        <div class="paper-card">
+            <button class="close-btn" onclick="closeModal()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <div class="text-[#d4af37] text-xl mb-2">✦</div>
+            <h2 id="modal-title" class="cinzel text-xs font-bold mb-4 tracking-widest text-blue-900 uppercase">Cualidad</h2>
+            <p id="modal-desc" class="text-slate-700 italic text-lg leading-snug px-2">Contenido...</p>
+            <div id="modal-author" class="author-tag">Autor</div>
+        </div>
+    </div>
+
+    <script>
+        const starsData = [
+            { id: 'paciencia', name: 'Paciencia', desc: '"Gracias por no rendirte conmigo cuando no entendía las letras. Me esperaste con una sonrisa."', author: '— Mateo, 7 años', x: 25, y: 40 },
+            { id: 'firmeza', name: 'Firmeza', desc: '"Me enseñaste que los límites son para protegernos. Gracias por decirme que no."', author: '— Sofía, 10 años', x: 45, y: 30 },
+            { id: 'humildad', name: 'Humildad', desc: '"Me sorprendió verte agachada a mi altura. Me enseñaste que los grandes saben ser pequeños."', author: '— Lucas, 8 años', x: 65, y: 25 },
+            { id: 'escucha', name: 'Escucha', desc: '"Aquel día triste, me viste aunque no dije nada. Gracias por escuchar mis silencios."', author: '— Luciana, 12 años', x: 82, y: 45 },
+            { id: 'creatividad', name: 'Creatividad', desc: '"Tus clases son viajes. Gracias por enseñarme que con imaginación todo es posible."', author: '— Kevin, 11 años', x: 75, y: 70 },
+            { id: 'ternura', name: 'Ternura', desc: '"Me equivoqué, pero me explicaste con tanto cariño que quise ser mejor persona."', author: '— Diego, 9 años', x: 55, y: 80 },
+            { id: 'disciplina', name: 'Disciplina', desc: '"Gracias por enseñarme que el esfuerzo es la llave. Hoy soy fuerte porque tú estuviste ahí."', author: '— Valentina, 15 años', x: 35, y: 75 },
+            { id: 'amor', name: 'Amor Exigente', desc: '"Me pides mucho porque sabes que puedo dar mucho. Gracias por soñar en grande por mí."', author: '— Gabriel, 11 años', x: 18, y: 62 },
+            { 
+                id: 'vocacion', 
+                name: 'Vocación', 
+                desc: 'Eres la chispa que enciende el saber. En La Salle Bolivia, tu luz es nuestra guía diaria.', 
+                author: 'Comunidad La Salle Bolivia',
+                x: 50, y: 55,
+                isSpecial: true
+            }
+        ];
+
+        function createAmbientStars() {
+            const container = document.getElementById('ambient-stars');
+            const num = window.innerWidth < 768 ? 80 : 180;
+            for (let i = 0; i < num; i++) {
+                const star = document.createElement('div');
+                star.className = 'tiny-star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                const size = Math.random() * 2;
+                star.style.width = `${size}px`; 
+                star.style.height = `${size}px`;
+                star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(star);
+            }
+        }
+
+        function setupConstellation() {
+            const svg = document.getElementById('constellation-svg');
+            const container = document.getElementById('stars-container');
+            const mainStarsCount = starsData.length - 1;
+
+            for (let i = 0; i < mainStarsCount; i++) {
+                const current = starsData[i];
+                const next = starsData[(i + 1) % mainStarsCount];
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', `${current.x}%`); line.setAttribute('y1', `${current.y}%`);
+                line.setAttribute('x2', `${next.x}%`); line.setAttribute('y2', `${next.y}%`);
+                line.setAttribute('class', 'constellation-line');
+                line.setAttribute('id', `line-${i}`);
+                svg.appendChild(line);
+            }
+
+            starsData.forEach((star, index) => {
+                const hitbox = document.createElement('div');
+                hitbox.className = 'star-hitbox';
+                hitbox.style.left = `${star.x}%`; hitbox.style.top = `${star.y}%`;
+                hitbox.onclick = () => openModal(star);
+
+                const starEl = document.createElement('div');
+                starEl.className = `main-star ${star.isSpecial ? 'special' : ''}`;
+                starEl.id = `star-${index}`;
+                starEl.style.animationDelay = `${index * 0.2}s`;
+
+                const labelEl = document.createElement('div');
+                labelEl.className = 'star-label';
+                labelEl.id = `label-${index}`;
+                labelEl.innerText = star.name;
+
+                hitbox.appendChild(starEl);
+                hitbox.appendChild(labelEl);
+                container.appendChild(hitbox);
+            });
+        }
+
+        async function runSequence() {
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            const texts = ['text-1', 'text-2', 'text-3', 'text-4'];
+
+            for (let i = 0; i < texts.length; i++) {
+                const el = document.getElementById(texts[i]);
+                el.classList.add('show');
+                
+                if (i === 1) {
+                    await sleep(1000);
+                    for (let j = 0; j < starsData.length; j++) {
+                        document.getElementById(`star-${j}`).classList.add('visible');
+                        document.getElementById(`label-${j}`).classList.add('visible');
+                        if (j < starsData.length - 1) document.getElementById(`line-${j}`)?.classList.add('line-draw');
+                        await sleep(300);
+                    }
+                }
+                await sleep(3500); 
+                el.classList.remove('show');
+                await sleep(1000);
+            }
+
+            const finalQuote = document.getElementById('final-quote');
+            const layer = document.getElementById('constellation-layer');
+            layer.classList.add('darken-back');
+            finalQuote.classList.add('show');
+            
+            await sleep(8000);
+            finalQuote.classList.remove('show');
+            layer.classList.remove('darken-back');
+            
+            await sleep(1500);
+            document.getElementById('click-hint').style.opacity = '1';
+        }
+
+        const modal = document.getElementById('paper-modal');
+        const layer = document.getElementById('constellation-layer');
+
+        function openModal(star) {
+            document.getElementById('modal-title').innerText = star.name;
+            document.getElementById('modal-desc').innerText = star.desc;
+            document.getElementById('modal-author').innerText = star.author;
+            modal.classList.add('open');
+            layer.classList.add('darken-back');
+            document.getElementById('click-hint').style.opacity = '0';
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            layer.classList.remove('darken-back');
+            setTimeout(() => {
+                if (!modal.classList.contains('open')) {
+                    document.getElementById('click-hint').style.opacity = '1';
+                }
+            }, 500);
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        window.onload = () => {
+            createAmbientStars();
+            setupConstellation();
+            setTimeout(runSequence, 1000);
+        };
+    </script>
+</body>
+</html>
