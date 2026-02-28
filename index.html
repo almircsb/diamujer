@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>La Constelación de las Educadoras - La Salle Bolivia</title>
+    <title>La Constelación de las Educadoras - 8 de Marzo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-deep: #020617;
-            --bg-nebula: #0f172a;
-            --star-glow: rgba(180, 210, 255, 0.9);
-            --line-color: rgba(255, 255, 255, 0.12);
-            --gold-glow: rgba(212, 175, 55, 0.6);
-            --aurora-1: rgba(45, 212, 191, 0.06);
-            --aurora-2: rgba(99, 102, 241, 0.06);
+            --bg-deep: #0f071a;
+            --bg-nebula: #1e0b2e;
+            --star-glow: rgba(255, 182, 193, 0.8);
+            --line-color: rgba(255, 192, 203, 0.2);
+            --gold-glow: rgba(255, 215, 0, 0.5);
+            --aurora-1: rgba(236, 72, 153, 0.08); /* Rosa */
+            --aurora-2: rgba(139, 92, 246, 0.08); /* Violeta */
         }
 
         body, html {
@@ -27,12 +27,11 @@
             transition: background-color 2s ease;
         }
 
-        body.white-out {
-            background: white !important;
-        }
+        body.white-out { background: white !important; }
 
         h1, h2, h3, .cinzel { font-family: 'Cinzel', serif; }
 
+        /* Fondo Aurora Femenino */
         .aurora-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 0; overflow: hidden; pointer-events: none;
@@ -42,19 +41,20 @@
             position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle at center, var(--aurora-1) 0%, transparent 50%),
                         radial-gradient(circle at 30% 20%, var(--aurora-2) 0%, transparent 40%);
-            filter: blur(60px);
-            animation: aurora-flow 40s infinite alternate ease-in-out;
+            filter: blur(80px);
+            animation: aurora-flow 45s infinite alternate ease-in-out;
         }
 
         @keyframes aurora-flow {
             0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-            100% { transform: translate(2%, 3%) rotate(5deg) scale(1.05); }
+            100% { transform: translate(3%, 4%) rotate(8deg) scale(1.1); }
         }
 
+        /* Luna con Brillo Pulsante */
         .moon {
             position: absolute; width: 60px; height: 60px;
-            background: #f8fafc; border-radius: 50%;
-            box-shadow: 0 0 35px 10px rgba(255, 255, 255, 0.4);
+            background: #fffafa; border-radius: 50%;
+            box-shadow: 0 0 35px 10px rgba(255, 200, 220, 0.4);
             z-index: 50; cursor: pointer;
             offset-path: path('M -100 250 Q 500 -100 1200 250');
             animation: moon-travel 360s linear infinite, moon-glow 4s ease-in-out infinite alternate;
@@ -68,126 +68,164 @@
             transition: background 2s ease;
         }
 
-        body.white-out .moon::after {
-            background: white;
-        }
+        body.white-out .moon::after { background: white; }
 
         @keyframes moon-travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
-        @keyframes moon-glow { from { box-shadow: 0 0 30px 5px rgba(255, 255, 255, 0.3); } to { box-shadow: 0 0 50px 15px rgba(255, 255, 255, 0.6); } }
+        @keyframes moon-glow { from { box-shadow: 0 0 30px 5px rgba(255, 182, 193, 0.3); } to { box-shadow: 0 0 55px 20px rgba(255, 182, 193, 0.6); } }
 
+        /* Estrellas de fondo con deriva lenta */
         #ambient-stars { 
-            position: absolute; top: 0; left: 0; width: 110%; height: 110%; 
+            position: absolute; top: -5%; left: -5%; width: 110%; height: 110%; 
             z-index: 2; pointer-events: none;
-            transition: transform 0.1s ease-out;
+            animation: drift 120s linear infinite;
         }
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -15px); }
+            100% { transform: translate(0, 0); }
+        }
+
         .tiny-star { position: absolute; background-color: white; border-radius: 50%; opacity: 0; animation: twinkle var(--duration) ease-in-out infinite alternate; }
         @keyframes twinkle { 0% { opacity: 0.1; transform: scale(0.6); } 100% { opacity: 0.7; transform: scale(1.1); } }
 
+        /* Estrellas Fugaces */
+        .shooting-star {
+            position: absolute; width: 2px; height: 2px;
+            background: linear-gradient(90deg, white, transparent);
+            box-shadow: 0 0 10px white;
+            opacity: 0; pointer-events: none; z-index: 3;
+        }
+        @keyframes shoot {
+            0% { transform: translateX(0) translateY(0) rotate(-45deg) scaleX(0); opacity: 1; }
+            70% { opacity: 1; }
+            100% { transform: translateX(-600px) translateY(600px) rotate(-45deg) scaleX(50); opacity: 0; }
+        }
+
+        /* Asteroides Rápidos (Cohetes) */
+        .asteroid {
+            position: absolute; z-index: 4; pointer-events: none;
+            display: flex; align-items: center;
+        }
+        .asteroid-body {
+            width: 12px; height: 12px;
+            background: #ffb6c1; border-radius: 40% 60% 50% 50%;
+            box-shadow: 0 0 15px #ff69b4;
+            position: relative;
+        }
+        .asteroid-trail {
+            width: 60px; height: 12px;
+            background: linear-gradient(to left, #ffb6c1, transparent);
+            filter: blur(4px);
+            margin-left: -55px;
+            border-radius: 50%;
+        }
+        @keyframes rocket-move {
+            0% { transform: translate(-100px, 0) rotate(var(--rot)); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(calc(100vw + 100px), var(--dy)) rotate(var(--rot)); opacity: 0; }
+        }
+
+        /* Capas de Constelación */
         #constellation-layer { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 10; transition: filter 1s ease, opacity 1s ease, transform 0.5s ease-out;
+            z-index: 10; transition: filter 1s ease, opacity 1s ease;
             transform-style: preserve-3d;
         }
-        .darken-back { filter: blur(8px) brightness(0.25); opacity: 0.3; transform: translateZ(-100px) rotateX(5deg); }
+        .darken-back { filter: blur(8px) brightness(0.25); opacity: 0.3; }
         
         svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .constellation-line { stroke: var(--line-color); stroke-width: 1; stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 3s ease-in-out; }
+        .constellation-line { stroke: var(--line-color); stroke-width: 1.5; stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 3s ease-in-out; }
         .line-draw { stroke-dashoffset: 0; }
 
-        .star-hitbox { position: absolute; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 25; transform: translate(-50%, -50%) translateZ(20px); }
-        .main-star { width: 10px; height: 10px; background: white; border-radius: 50%; box-shadow: 0 0 15px 2px var(--star-glow); opacity: 0; transition: opacity 1s, transform 0.3s; }
-        .main-star.special { width: 14px; height: 14px; background: #fff8e1; box-shadow: 0 0 25px 6px var(--gold-glow); }
+        .star-hitbox { position: absolute; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 25; transform: translate(-50%, -50%); }
+        .main-star { width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 0 15px 3px var(--star-glow); opacity: 0; transition: opacity 1s, transform 0.3s; }
+        .main-star.special { width: 14px; height: 14px; background: #fffdfa; box-shadow: 0 0 25px 6px var(--gold-glow); border: 1px solid gold; }
         .main-star.read { filter: grayscale(0.5); opacity: 0.6 !important; box-shadow: 0 0 5px white; }
         .visible { opacity: 1 !important; }
         
-        .star-label { position: absolute; color: rgba(255, 255, 255, 0.4); font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; opacity: 0; transition: opacity 1s ease 0.5s; top: 28px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+        .star-label { position: absolute; color: rgba(255, 192, 203, 0.6); font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; opacity: 0; transition: opacity 1s ease 0.5s; top: 32px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
 
         #narrative-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 30; pointer-events: none; text-align: center; padding: 20px; }
-        .narrative-text { position: absolute; opacity: 0; transition: all 1.5s ease; transform: translateY(15px); background: rgba(2, 6, 23, 0.8); padding: 20px 30px; border-radius: 40px; max-width: 85%; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.05); }
+        .narrative-text { position: absolute; opacity: 0; transition: all 1.5s ease; transform: translateY(15px); background: rgba(30, 11, 46, 0.85); padding: 25px 35px; border-radius: 40px; max-width: 85%; backdrop-filter: blur(10px); border: 1px solid rgba(255,182,193,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .narrative-text.show { opacity: 1; transform: translateY(0); }
 
         #final-quote {
             position: fixed;
             top: 50%; left: 50%;
-            width: 85%;
-            max-width: 700px;
+            width: 85%; max-width: 700px;
             text-align: center;
             opacity: 0;
             transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 60;
-            transform: translate(-50%, -45%) scale(0.9);
+            transform: translate(-50%, -45%) scale(0.95);
             pointer-events: none;
         }
+        #final-quote.show { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: all; }
 
-        #final-quote.show {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-            pointer-events: all;
+        /* Rosa Animada */
+        .animated-rose {
+            width: 80px; height: 80px; margin: 0 auto 20px auto;
+            filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.5));
+            animation: rose-float 3s ease-in-out infinite;
+        }
+        @keyframes rose-float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
         }
 
-        #paper-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; padding: 20px; }
+        #paper-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 7, 26, 0.8); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; padding: 20px; }
         #paper-modal.open { opacity: 1; pointer-events: all; }
-        .paper-card { background: #fff; color: #0f172a; padding: 2.5rem 1.5rem; border-radius: 20px; width: 100%; max-width: 420px; text-align: center; transform: scale(0.9); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .paper-card { background: #fff; color: #1e0b2e; padding: 2.5rem 1.5rem; border-radius: 25px; width: 100%; max-width: 420px; text-align: center; transform: scale(0.9); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; border: 4px double #fce7f3; }
         #paper-modal.open .paper-card { transform: scale(1); }
-        .close-btn { position: absolute; top: 15px; right: 15px; padding: 10px; color: #94a3b8; }
+        .close-btn { position: absolute; top: 15px; right: 15px; padding: 10px; color: #ec4899; }
+        
+        /* Título de ficha aumentado */
+        #modal-title { font-size: 1rem; letter-spacing: 0.3em; margin-bottom: 1.5rem; color: #be185d; }
 
-        .hint { position: absolute; bottom: 5%; width: 100%; text-align: center; font-size: 0.6rem; color: rgba(255,255,255,0.3); letter-spacing: 3px; opacity: 0; transition: opacity 2s; pointer-events: none; }
+        .hint { position: absolute; bottom: 8%; width: 100%; text-align: center; font-size: 0.6rem; color: rgba(255,192,203,0.4); letter-spacing: 4px; opacity: 0; transition: opacity 2s; pointer-events: none; }
 
-        /* Nuevos Elementos Solicitados */
-        #moon-image-modal { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); z-index: 200; 
-            display: flex; justify-content: center; align-items: center; 
-            opacity: 0; pointer-events: none; transition: opacity 1s ease;
-        }
+        #moon-image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 200; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 1s ease; }
         #moon-image-modal.active { opacity: 1; pointer-events: all; }
-        #moon-image-modal img { max-width: 90%; max-height: 80%; border-radius: 10px; box-shadow: 0 0 50px rgba(255,255,255,0.2); }
+        #moon-image-modal img { max-width: 90%; max-height: 80%; border-radius: 20px; border: 2px solid pink; }
 
-        #white-flash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 300; opacity: 0; pointer-events: none;
-            transition: opacity 1.5s ease-in;
-        }
+        #white-flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 300; opacity: 0; pointer-events: none; transition: opacity 1.5s ease-in; }
         #white-flash.active { opacity: 1; }
 
-        #final-logo-container {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 310; opacity: 0; transition: opacity 1.5s ease;
-            pointer-events: none; text-align: center;
-        }
+        #final-logo-container { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 310; opacity: 0; transition: opacity 1.5s ease; pointer-events: none; text-align: center; }
         #final-logo-container.active { opacity: 1; }
-        #final-logo-container img { width: 250px; height: auto; margin-bottom: 20px; }
+        #final-logo-container img { width: 220px; height: auto; margin-bottom: 25px; filter: drop-shadow(0 0 10px rgba(0,0,0,0.1)); }
     </style>
 </head>
 <body>
 
-    <!-- Música de fondo -->
     <audio id="bg-music" loop>
         <source src="https://almircsb.github.io/diamujer/ParaM.mp3" type="audio/mpeg">
     </audio>
 
     <div class="aurora-container"><div class="aurora"></div></div>
     
-    <!-- Luna Brillante Interactiva -->
     <div class="moon" onclick="handleMoonClick()"></div>
     
     <div id="ambient-stars"></div>
+    <div id="shooting-stars-layer"></div>
+    <div id="asteroids-layer"></div>
 
     <div id="narrative-overlay">
         <h1 id="text-1" class="narrative-text cinzel text-white font-bold">
-            A las futuras maestras de La Salle...<br>
-            <span class="text-[10px] font-normal opacity-70 block mt-2">Sembrando semillas de eternidad.</span>
+            A las educadoras de La Salle...<br>
+            <span class="text-[10px] font-normal text-pink-300 block mt-2 tracking-widest uppercase">8 de Marzo - Día de la Mujer</span>
         </h1>
-        <p id="text-2" class="narrative-text text-blue-100 italic">
-            En la Educación, formamos una<br>constelación de esperanza.
+        <p id="text-2" class="narrative-text text-pink-100 italic">
+            Ustedes son las arquitectas de sueños<br>y guías en el firmamento.
         </p>
-        <p id="text-3" class="narrative-text text-blue-100">
-            Cada una de ustedes es una luz única.<br>
-            <span class="text-[10px] block mt-1">Cualidades con nombre propio.</span>
+        <p id="text-3" class="narrative-text text-pink-100">
+            Cada cualidad suya es una estrella<br>
+            <span class="text-[10px] block mt-1 uppercase tracking-tighter">que ilumina el sendero lasallista.</span>
         </p>
         <p id="text-4" class="narrative-text text-white">
-            Ven en cada niño el milagro<br>
-            <span class="italic text-blue-300 font-bold">que puede llegar a ser.</span>
+            Feliz Día de la Mujer,<br>
+            <span class="italic text-pink-300 font-bold">maestras de vida.</span>
         </p>
     </div>
 
@@ -197,29 +235,38 @@
     </div>
 
     <div id="final-quote">
-        <div class="bg-blue-950/40 backdrop-blur-xl p-8 rounded-[40px] border border-white/10 shadow-2xl">
-            <p class="cinzel text-xl md:text-3xl text-white font-bold mb-4 px-4">
-                No es un día en el calendario.
-            </p>
-            <p class="text-blue-100 text-sm md:text-lg italic px-6 leading-relaxed">
-                "Es la luz silenciosa con la que tocan vidas,<br>
-                la paciencia que construye futuros."
-            </p>
-            <div class="mt-8 pt-6 border-t border-white/10">
-                <p id="blessing-text" class="cinzel text-sm text-yellow-400 font-bold tracking-[0.4em]">DIOS LAS BENDIGA</p>
+        <div class="bg-pink-950/40 backdrop-blur-xl p-10 rounded-[50px] border border-pink-200/10 shadow-2xl relative">
+            <!-- Rosa Animada SVG -->
+            <div class="animated-rose">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 35C45 20 20 20 20 40C20 60 50 85 50 85C50 85 80 60 80 40C80 20 55 20 50 35Z" fill="#ec4899"/>
+                    <path d="M50 45C48 38 35 38 35 48C35 58 50 72 50 72C50 72 65 58 65 48C65 38 52 38 50 45Z" fill="#f472b6"/>
+                    <path d="M50 85V95" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M50 90C50 90 60 85 65 82" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
+                </svg>
             </div>
-            <button onclick="location.reload()" class="mt-6 text-[8px] tracking-widest text-white/30 uppercase border border-white/20 px-4 py-2 rounded-full hover:bg-white/10 transition-colors">Ver de nuevo</button>
+
+            <h2 class="cinzel text-pink-300 text-xs font-bold tracking-[0.3em] mb-4">8 DE MARZO</h2>
+            <p class="cinzel text-xl md:text-3xl text-white font-bold mb-4">
+                Luz y Corazón de La Salle
+            </p>
+            <p class="text-pink-100 text-sm md:text-lg italic px-6 leading-relaxed">
+                "Su dedicación es el regalo más grande<br>
+                que nuestra comunidad recibe cada día."
+            </p>
+            <div class="mt-8 pt-6 border-t border-pink-200/10">
+                <p id="blessing-text" class="cinzel text-sm text-yellow-300 font-bold tracking-[0.4em]">DIOS LAS BENDIGA</p>
+            </div>
+            <button onclick="location.reload()" class="mt-8 text-[9px] tracking-[0.2em] text-pink-200/40 uppercase border border-pink-200/20 px-6 py-2 rounded-full hover:bg-pink-100/10 transition-colors">Volver al inicio</button>
         </div>
     </div>
 
-    <div id="click-hint" class="hint">TOCA TODAS LAS ESTRELLAS PARA DESCUBRIR EL FINAL</div>
+    <div id="click-hint" class="hint uppercase">EXPLORA LA CONSTELACIÓN</div>
 
-    <!-- Modal de la Imagen de la Luna -->
     <div id="moon-image-modal">
         <img src="https://almircsb.github.io/diamujer/Mujeres%20La%20Salle.png" alt="Mujeres La Salle">
     </div>
 
-    <!-- Efecto de Brillo Total y Logo Final -->
     <div id="white-flash"></div>
     <div id="final-logo-container">
         <img src="https://boliviadigna.org/wp-content/uploads/2017/04/Logo-La-Salle-small.jpg" alt="Logo La Salle">
@@ -231,24 +278,24 @@
             <button class="close-btn" onclick="closeModal()">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-            <div class="text-[#d4af37] text-xl mb-2">✦</div>
-            <h2 id="modal-title" class="cinzel text-xs font-bold mb-4 tracking-widest text-blue-900 uppercase">Cualidad</h2>
-            <p id="modal-desc" class="text-slate-700 italic text-lg leading-snug px-2"></p>
-            <div id="modal-author" class="mt-6 pt-4 border-t border-slate-100 cinzel text-[10px] text-blue-800 font-bold"></div>
+            <div class="text-pink-400 text-2xl mb-2">❦</div>
+            <h2 id="modal-title" class="cinzel font-bold tracking-widest uppercase">Cualidad</h2>
+            <p id="modal-desc" class="text-slate-800 italic text-xl leading-snug px-2 font-medium"></p>
+            <div id="modal-author" class="mt-6 pt-4 border-t border-pink-50 cinzel text-[10px] text-pink-900 font-bold"></div>
         </div>
     </div>
 
     <script>
         const starsData = [
-            { id: 1, name: 'Paciencia', desc: '"Gracias por no rendirte conmigo cuando no entendía las letras. Me esperaste con una sonrisa."', author: '— Mateo, 7 años', x: 25, y: 40 },
-            { id: 2, name: 'Firmeza', desc: '"Me enseñaste que los límites son para protegernos. Gracias por decirme que no."', author: '— Sofía, 10 años', x: 45, y: 30 },
+            { id: 1, name: 'Paciencia Infinita', desc: '"Gracias por no rendirte conmigo cuando no entendía las letras. Me esperaste con una sonrisa."', author: '— Mateo, 7 años', x: 25, y: 40 },
+            { id: 2, name: 'Firmeza Dulce', desc: '"Me enseñaste que los límites son para protegernos. Gracias por decirme que no con amor."', author: '— Sofía, 10 años', x: 45, y: 30 },
             { id: 3, name: 'Humildad', desc: '"Me sorprendió verte agachada a mi altura. Me enseñaste que los grandes saben ser pequeños."', author: '— Lucas, 8 años', x: 65, y: 25 },
-            { id: 4, name: 'Escucha', desc: '"Aquel día triste, me viste aunque no dije nada. Gracias por escuchar mis silencios."', author: '— Luciana, 12 años', x: 82, y: 45 },
-            { id: 5, name: 'Creatividad', desc: '"Tus clases son viajes. Gracias por enseñarme que con imaginación todo es posible."', author: '— Kevin, 11 años', x: 75, y: 70 },
+            { id: 4, name: 'Escucha Atenta', desc: '"Aquel día triste, me viste aunque no dije nada. Gracias por escuchar mis silencios."', author: '— Luciana, 12 años', x: 82, y: 45 },
+            { id: 5, name: 'Creatividad Mágica', desc: '"Tus clases son viajes. Gracias por enseñarme que con imaginación todo es posible."', author: '— Kevin, 11 años', x: 75, y: 70 },
             { id: 6, name: 'Ternura', desc: '"Me equivoqué, pero me explicaste con tanto cariño que quise ser mejor persona."', author: '— Diego, 9 años', x: 55, y: 80 },
             { id: 7, name: 'Disciplina', desc: '"Gracias por enseñarme que el esfuerzo es la llave. Hoy soy fuerte porque tú estuviste ahí."', author: '— Valentina, 15 años', x: 35, y: 75 },
-            { id: 8, name: 'Amor Exigente', desc: '"Me pides mucho porque sabes que puedo dar mucho. Gracias por soñar en grande por mí."', author: '— Gabriel, 11 años', x: 18, y: 62 },
-            { id: 9, name: 'Vocación', desc: 'Eres la chispa que enciende el saber. En La Salle Bolivia, tu luz es nuestra guía diaria.', author: 'Comunidad La Salle Bolivia', x: 50, y: 55, isSpecial: true }
+            { id: 8, name: 'Inspiración', desc: '"Me pides mucho porque sabes que puedo dar mucho. Gracias por soñar en grande por mí."', author: '— Gabriel, 11 años', x: 18, y: 62 },
+            { id: 9, name: 'Vocación de Mujer', desc: 'Ustedes son el corazón que late en cada aula. Su luz es el orgullo de La Salle Bolivia.', author: 'Feliz 8 de Marzo', x: 50, y: 55, isSpecial: true }
         ];
 
         let starsRead = new Set();
@@ -256,58 +303,68 @@
 
         function tryPlayMusic() {
             music.play().catch(() => {
-                document.addEventListener('click', startMusicOnce, { once: true });
-                document.addEventListener('touchstart', startMusicOnce, { once: true });
+                document.addEventListener('click', () => music.play(), { once: true });
             });
         }
 
-        function startMusicOnce() {
-            music.play();
-        }
-
-        // Manejo del click en la luna
         function handleMoonClick() {
             const moonModal = document.getElementById('moon-image-modal');
             const whiteFlash = document.getElementById('white-flash');
             const logoContainer = document.getElementById('final-logo-container');
             
-            // 1. Mostrar imagen de Mujeres La Salle
             moonModal.classList.add('active');
             
-            // 2. Iniciar secuencia de brillo total después de 5s
             setTimeout(() => {
                 moonModal.classList.remove('active');
                 whiteFlash.classList.add('active');
                 document.body.classList.add('white-out');
                 
-                // 3. Mostrar logotipo al medio
                 setTimeout(() => {
                     logoContainer.classList.add('active');
-                    
-                    // 4. Hacer desaparecer logotipo después de 1 segundo (más el tiempo de transición)
                     setTimeout(() => {
                         logoContainer.classList.remove('active');
-                        
-                        // 5. El brillo vuelve a oscurecerse para seguir viendo las estrellas
                         setTimeout(() => {
                             whiteFlash.classList.remove('active');
                             document.body.classList.remove('white-out');
-                        }, 1000); // Tiempo para que el logo se desvanezca antes de quitar el fondo blanco
-                        
-                    }, 1500); // Tiempo visible del logo
-                    
-                }, 1000); // Tiempo para que el flash blanco cubra la pantalla
-                
+                        }, 1000);
+                    }, 1500);
+                }, 1000);
             }, 5000); 
         }
 
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        function spawnShootingStar() {
+            const layer = document.getElementById('shooting-stars-layer');
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.top = Math.random() * 50 + '%';
+            star.style.left = (Math.random() * 50 + 50) + '%';
+            star.style.animation = 'shoot 1.5s ease-out forwards';
+            layer.appendChild(star);
+            setTimeout(() => star.remove(), 2000);
+        }
+
+        function spawnRocketAsteroid() {
+            const layer = document.getElementById('asteroids-layer');
+            const ast = document.createElement('div');
+            ast.className = 'asteroid';
             
-            document.getElementById('constellation-layer').style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
-            document.getElementById('ambient-stars').style.transform = `translate(${x*2}px, ${y*2}px)`;
-        });
+            const startY = Math.random() * 80 + 10;
+            const diffY = (Math.random() * 100 - 50);
+            const rot = Math.atan2(diffY, window.innerWidth) * (180 / Math.PI);
+            
+            ast.style.top = startY + '%';
+            ast.style.setProperty('--dy', diffY + 'px');
+            ast.style.setProperty('--rot', rot + 'deg');
+            ast.style.animation = 'rocket-move 3s linear forwards';
+            
+            ast.innerHTML = `
+                <div class="asteroid-trail"></div>
+                <div class="asteroid-body"></div>
+            `;
+            
+            layer.appendChild(ast);
+            setTimeout(() => ast.remove(), 3500);
+        }
 
         function init() {
             const starCont = document.getElementById('ambient-stars');
@@ -315,13 +372,17 @@
             const starsLayer = document.getElementById('stars-container');
 
             tryPlayMusic();
+            
+            // Ciclo de asteroides: uno a la vez
+            setInterval(spawnRocketAsteroid, 5000);
+            setInterval(spawnShootingStar, 8000);
 
-            for(let i=0; i<120; i++){
+            for(let i=0; i<150; i++){
                 const s = document.createElement('div');
                 s.className = 'tiny-star';
                 s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
-                s.style.width = s.style.height = Math.random()*2+'px';
-                s.style.setProperty('--duration', (Math.random()*3+2)+'s');
+                s.style.width = s.style.height = (Math.random()*1.5 + 0.5)+'px';
+                s.style.setProperty('--duration', (Math.random()*4+2)+'s');
                 s.style.animationDelay = Math.random()*5+'s';
                 starCont.appendChild(s);
             }
@@ -364,10 +425,10 @@
                         document.getElementById('star-'+j).classList.add('visible');
                         document.getElementById('label-'+j).classList.add('visible');
                         if(j<starsData.length-1) document.getElementById('line-'+j).classList.add('line-draw');
-                        await sleep(200);
+                        await sleep(250);
                     }
                 }
-                await sleep(3000); t.classList.remove('show'); await sleep(800);
+                await sleep(3500); t.classList.remove('show'); await sleep(800);
             }
             document.getElementById('click-hint').style.opacity = '1';
         }
@@ -390,10 +451,8 @@
 
         function showFinalSurprise() {
             closeModal();
-            const finalQuote = document.getElementById('final-quote');
-            const layer = document.getElementById('constellation-layer');
-            layer.classList.add('darken-back');
-            finalQuote.classList.add('show');
+            document.getElementById('final-quote').classList.add('show');
+            document.getElementById('constellation-layer').classList.add('darken-back');
         }
 
         function closeModal() {
@@ -401,9 +460,7 @@
             if(!document.getElementById('final-quote').classList.contains('show')) {
                 document.getElementById('constellation-layer').classList.remove('darken-back');
                 setTimeout(() => {
-                    if (starsRead.size < starsData.length) {
-                        document.getElementById('click-hint').style.opacity = '1';
-                    }
+                    if (starsRead.size < starsData.length) document.getElementById('click-hint').style.opacity = '1';
                 }, 500);
             }
         }
