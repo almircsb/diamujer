@@ -1,220 +1,726 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>La Constelación de las Educadoras - 8 de Marzo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:ital,wght@0,300;0,400;0,600;1,300&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-deep: #0f071a;
             --bg-nebula: #1e0b2e;
             --star-glow: rgba(255, 182, 193, 0.8);
-            --line-color: rgba(255, 192, 203, 0.2);
+            --line-color: rgba(255, 192, 203, 0.15);
             --gold-glow: rgba(255, 215, 0, 0.5);
-            --aurora-1: rgba(236, 72, 153, 0.08); /* Rosa */
-            --aurora-2: rgba(139, 92, 246, 0.08); /* Violeta */
+            --aurora-1: rgba(236, 72, 153, 0.08);
+            --aurora-2: rgba(139, 92, 246, 0.08);
         }
 
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             background-color: var(--bg-deep);
             background-image: radial-gradient(circle at 50% 50%, var(--bg-nebula) 0%, var(--bg-deep) 100%);
-            color: white; font-family: 'Montserrat', sans-serif;
-            overflow: hidden; touch-action: manipulation;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
             perspective: 1000px;
             transition: background-color 2s ease;
         }
 
-        body.white-out { background: white !important; }
+        body.white-out {
+            background: white !important;
+        }
 
-        h1, h2, h3, .cinzel { font-family: 'Cinzel', serif; }
+        h1,
+        h2,
+        h3,
+        .cinzel {
+            font-family: 'Cinzel', serif;
+        }
 
-        /* Fondo Aurora Femenino */
+        /* Aurora background */
         .aurora-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; overflow: hidden; pointer-events: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
         }
 
         .aurora {
-            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
             background: radial-gradient(circle at center, var(--aurora-1) 0%, transparent 50%),
-                        radial-gradient(circle at 30% 20%, var(--aurora-2) 0%, transparent 40%);
+                radial-gradient(circle at 30% 20%, var(--aurora-2) 0%, transparent 40%);
             filter: blur(80px);
             animation: aurora-flow 45s infinite alternate ease-in-out;
         }
 
         @keyframes aurora-flow {
-            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-            100% { transform: translate(3%, 4%) rotate(8deg) scale(1.1); }
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+
+            100% {
+                transform: translate(3%, 4%) rotate(8deg) scale(1.1);
+            }
         }
 
-        /* Luna con Brillo Pulsante */
+        /* Moon styling */
         .moon {
-            position: absolute; width: 60px; height: 60px;
-            background: #fffafa; border-radius: 50%;
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #fffafa;
+            border-radius: 50%;
             box-shadow: 0 0 35px 10px rgba(255, 200, 220, 0.4);
-            z-index: 50; cursor: pointer;
+            z-index: 50;
+            cursor: pointer;
             offset-path: path('M -100 250 Q 500 -100 1200 250');
-            animation: moon-travel 360s linear infinite, moon-glow 4s ease-in-out infinite alternate;
+            animation: moon-travel 360s linear infinite, moon-glow 4s ease-in-out infinite alternate, moon-pulse 2s ease-in-out infinite;
             transform: translateZ(-200px);
         }
 
         .moon::after {
-            content: ''; position: absolute; top: 0; right: -10px;
-            width: 60px; height: 60px; background: var(--bg-nebula);
-            border-radius: 50%; transform: scale(0.9) translate(-8px, -4px);
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -10px;
+            width: 60px;
+            height: 60px;
+            background: var(--bg-nebula);
+            border-radius: 50%;
+            transform: scale(0.9) translate(-8px, -4px);
             transition: background 2s ease;
         }
 
-        body.white-out .moon::after { background: white; }
-
-        @keyframes moon-travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
-        @keyframes moon-glow { from { box-shadow: 0 0 30px 5px rgba(255, 182, 193, 0.3); } to { box-shadow: 0 0 55px 20px rgba(255, 182, 193, 0.6); } }
-
-        /* Estrellas de fondo con deriva lenta */
-        #ambient-stars { 
-            position: absolute; top: -5%; left: -5%; width: 110%; height: 110%; 
-            z-index: 2; pointer-events: none;
-            animation: drift 120s linear infinite;
-        }
-        @keyframes drift {
-            0% { transform: translate(0, 0); }
-            50% { transform: translate(-20px, -15px); }
-            100% { transform: translate(0, 0); }
+        body.white-out .moon::after {
+            background: white;
         }
 
-        .tiny-star { position: absolute; background-color: white; border-radius: 50%; opacity: 0; animation: twinkle var(--duration) ease-in-out infinite alternate; }
-        @keyframes twinkle { 0% { opacity: 0.1; transform: scale(0.6); } 100% { opacity: 0.7; transform: scale(1.1); } }
+        @keyframes moon-travel {
+            from {
+                offset-distance: 0%;
+            }
 
-        /* Estrellas Fugaces */
+            to {
+                offset-distance: 100%;
+            }
+        }
+
+        @keyframes moon-glow {
+            from {
+                box-shadow: 0 0 30px 5px rgba(255, 182, 193, 0.3);
+            }
+
+            to {
+                box-shadow: 0 0 55px 20px rgba(255, 182, 193, 0.6);
+            }
+        }
+
+        @keyframes moon-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Ambient stars */
+        #ambient-stars {
+            position: absolute;
+            top: -5%;
+            left: -5%;
+            width: 110%;
+            height: 110%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .tiny-star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.1;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Woman Silhouette */
+        .woman-silhouette-star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            width: 2px;
+            height: 2px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        .woman-silhouette-line {
+            stroke: rgba(255, 192, 203, 0.18);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-dasharray: 5 3;
+        }
+
+        /* Shooting Stars */
         .shooting-star {
-            position: absolute; width: 2px; height: 2px;
+            position: absolute;
+            width: 2px;
+            height: 2px;
             background: linear-gradient(90deg, white, transparent);
             box-shadow: 0 0 10px white;
-            opacity: 0; pointer-events: none; z-index: 3;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 3;
         }
+
         @keyframes shoot {
-            0% { transform: translateX(0) translateY(0) rotate(-45deg) scaleX(0); opacity: 1; }
-            70% { opacity: 1; }
-            100% { transform: translateX(-600px) translateY(600px) rotate(-45deg) scaleX(50); opacity: 0; }
+            0% {
+                transform: translateX(0) translateY(0) rotate(-45deg) scaleX(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-600px) translateY(600px) rotate(-45deg) scaleX(50);
+                opacity: 0;
+            }
         }
 
-        /* Asteroides Rápidos (Cohetes) */
-        .asteroid {
-            position: absolute; z-index: 4; pointer-events: none;
-            display: flex; align-items: center;
-        }
-        .asteroid-body {
-            width: 12px; height: 12px;
-            background: #ffb6c1; border-radius: 40% 60% 50% 50%;
-            box-shadow: 0 0 15px #ff69b4;
-            position: relative;
-        }
-        .asteroid-trail {
-            width: 60px; height: 12px;
-            background: linear-gradient(to left, #ffb6c1, transparent);
-            filter: blur(4px);
-            margin-left: -55px;
-            border-radius: 50%;
-        }
-        @keyframes rocket-move {
-            0% { transform: translate(-100px, 0) rotate(var(--rot)); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translate(calc(100vw + 100px), var(--dy)) rotate(var(--rot)); opacity: 0; }
-        }
-
-        /* Capas de Constelación */
-        #constellation-layer { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 10; transition: filter 1s ease, opacity 1s ease;
+        /* Constellation Layer */
+        #constellation-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            transition: filter 1s ease, opacity 1s ease;
             transform-style: preserve-3d;
         }
-        .darken-back { filter: blur(8px) brightness(0.25); opacity: 0.3; }
-        
-        svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .constellation-line { stroke: var(--line-color); stroke-width: 1.5; stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 3s ease-in-out; }
-        .line-draw { stroke-dashoffset: 0; }
 
-        .star-hitbox { position: absolute; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 25; transform: translate(-50%, -50%); }
-        .main-star { width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 0 15px 3px var(--star-glow); opacity: 0; transition: opacity 1s, transform 0.3s; }
-        .main-star.special { width: 14px; height: 14px; background: #fffdfa; box-shadow: 0 0 25px 6px var(--gold-glow); border: 1px solid gold; }
-        .main-star.read { filter: grayscale(0.5); opacity: 0.6 !important; box-shadow: 0 0 5px white; }
-        .visible { opacity: 1 !important; }
-        
-        .star-label { position: absolute; color: rgba(255, 192, 203, 0.6); font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; opacity: 0; transition: opacity 1s ease 0.5s; top: 32px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+        .darken-back {
+            filter: blur(8px) brightness(0.25);
+            opacity: 0.3;
+        }
 
-        #narrative-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 30; pointer-events: none; text-align: center; padding: 20px; }
-        .narrative-text { position: absolute; opacity: 0; transition: all 1.5s ease; transform: translateY(15px); background: rgba(30, 11, 46, 0.85); padding: 25px 35px; border-radius: 40px; max-width: 85%; backdrop-filter: blur(10px); border: 1px solid rgba(255,182,193,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .narrative-text.show { opacity: 1; transform: translateY(0); }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
 
+        .constellation-line {
+            stroke: var(--line-color);
+            stroke-width: 1.5;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 3s ease-in-out;
+        }
+
+        .line-draw {
+            stroke-dashoffset: 0;
+        }
+
+        .star-hitbox {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 25;
+            transform: translate(-50%, -50%);
+        }
+
+        .main-star {
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 3px var(--star-glow);
+            opacity: 0;
+            transition: opacity 1s, transform 0.3s;
+            animation: star-pulse 2s infinite ease-in-out;
+        }
+
+        .main-star.special {
+            width: 14px;
+            height: 14px;
+            background: #fffdfa;
+            box-shadow: 0 0 25px 6px var(--gold-glow);
+            border: 1px solid gold;
+        }
+
+        .main-star.read {
+            filter: grayscale(0.5);
+            opacity: 0.6 !important;
+            box-shadow: 0 0 5px white;
+            animation: none;
+        }
+
+        .visible {
+            opacity: 1 !important;
+        }
+
+        @keyframes star-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 15px 3px var(--star-glow);
+            }
+
+            50% {
+                transform: scale(1.4);
+                box-shadow: 0 0 25px 8px var(--star-glow);
+            }
+        }
+
+        .star-label {
+            position: absolute;
+            color: rgba(255, 192, 203, 0.6);
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease 0.5s;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        /* Narrative Intro */
+        #narrative-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
+            pointer-events: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .narrative-text {
+            position: absolute;
+            opacity: 0;
+            transition: all 1.5s ease;
+            transform: translateY(15px);
+            background: rgba(30, 11, 46, 0.85);
+            padding: 25px 35px;
+            border-radius: 40px;
+            max-width: 85%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 182, 193, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .narrative-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Final Quote & Flower Animation */
         #final-quote {
             position: fixed;
-            top: 50%; left: 50%;
-            width: 85%; max-width: 700px;
+            top: 50%;
+            left: 50%;
+            width: 85%;
+            max-width: 700px;
             text-align: center;
             opacity: 0;
-            transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 1.5s ease;
             z-index: 60;
             transform: translate(-50%, -45%) scale(0.95);
             pointer-events: none;
         }
-        #final-quote.show { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: all; }
 
-        /* Rosa Animada */
-        .animated-rose {
-            width: 80px; height: 80px; margin: 0 auto 20px auto;
-            filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.5));
-            animation: rose-float 3s ease-in-out infinite;
-        }
-        @keyframes rose-float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
+        #final-quote.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: all;
         }
 
-        #paper-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 7, 26, 0.8); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; padding: 20px; }
-        #paper-modal.open { opacity: 1; pointer-events: all; }
-        .paper-card { background: #fff; color: #1e0b2e; padding: 2.5rem 1.5rem; border-radius: 25px; width: 100%; max-width: 420px; text-align: center; transform: scale(0.9); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; border: 4px double #fce7f3; }
-        #paper-modal.open .paper-card { transform: scale(1); }
-        .close-btn { position: absolute; top: 15px; right: 15px; padding: 10px; color: #ec4899; }
-        
-        /* Título de ficha aumentado */
-        #modal-title { font-size: 1rem; letter-spacing: 0.3em; margin-bottom: 1.5rem; color: #be185d; }
+        #final-quote.fade-out {
+            opacity: 0;
+            transform: translate(-50%, -55%) scale(0.9);
+            pointer-events: none;
+        }
 
-        .hint { position: absolute; bottom: 8%; width: 100%; text-align: center; font-size: 0.6rem; color: rgba(255,192,203,0.4); letter-spacing: 4px; opacity: 0; transition: opacity 2s; pointer-events: none; }
+        .flower-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
 
-        #moon-image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 200; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 1s ease; }
-        #moon-image-modal.active { opacity: 1; pointer-events: all; }
-        #moon-image-modal img { max-width: 90%; max-height: 80%; border-radius: 20px; border: 2px solid pink; }
+        .flower-petal {
+            position: absolute;
+            width: 30px;
+            height: 50px;
+            background: #ec4899;
+            border-radius: 50% 50% 10% 10%;
+            left: 35px;
+            top: 10px;
+            transform-origin: bottom center;
+            opacity: 0;
+            transition: all 2s ease;
+        }
 
-        #white-flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 300; opacity: 0; pointer-events: none; transition: opacity 1.5s ease-in; }
-        #white-flash.active { opacity: 1; }
+        #final-quote.show .flower-petal {
+            opacity: 0.8;
+        }
 
-        #final-logo-container { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 310; opacity: 0; transition: opacity 1.5s ease; pointer-events: none; text-align: center; }
-        #final-logo-container.active { opacity: 1; }
-        #final-logo-container img { width: 220px; height: auto; margin-bottom: 25px; filter: drop-shadow(0 0 10px rgba(0,0,0,0.1)); }
+        #final-quote.show .petal-1 {
+            transform: rotate(0deg) translateY(-10px);
+        }
+
+        #final-quote.show .petal-2 {
+            transform: rotate(72deg) translateY(-10px);
+        }
+
+        #final-quote.show .petal-3 {
+            transform: rotate(144deg) translateY(-10px);
+        }
+
+        #final-quote.show .petal-4 {
+            transform: rotate(216deg) translateY(-10px);
+        }
+
+        #final-quote.show .petal-5 {
+            transform: rotate(288deg) translateY(-10px);
+        }
+
+        .flower-center {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #fbbf24;
+            border-radius: 50%;
+            left: 37.5px;
+            top: 45px;
+            z-index: 2;
+            box-shadow: 0 0 15px gold;
+            transform: scale(0);
+            transition: transform 2.5s 1s ease;
+        }
+
+        #final-quote.show .flower-center {
+            transform: scale(1);
+        }
+
+        /* Professor Messages (Carousel) */
+        #professors-carousel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 85%;
+            max-width: 600px;
+            transform: translate(-50%, -50%);
+            z-index: 70;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #professors-carousel.active-events {
+            pointer-events: all;
+        }
+
+        .prof-card {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .prof-card.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .prof-card.exit {
+            opacity: 0;
+            transform: translateY(-30px) scale(1.05);
+        }
+
+        .repeat-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            pointer-events: all;
+        }
+
+        .repeat-btn:hover {
+            background: white;
+            color: #1e0b2e;
+            transform: scale(1.05);
+        }
+
+        /* Card Modal */
+        #paper-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 7, 26, 0.8);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        #paper-modal.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .paper-card {
+            background: #fff;
+            color: #1e0b2e;
+            padding: 3rem 2rem;
+            border-radius: 35px;
+            width: 100%;
+            max-width: 420px;
+            text-align: left;
+            transform: scale(0.9);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            border: 1px solid rgba(236, 72, 153, 0.1);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+            cursor: default;
+        }
+
+        #paper-modal.open .paper-card {
+            transform: scale(1);
+        }
+
+        .close-instruction {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .child-illustration {
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            width: 110px;
+            height: 110px;
+            filter: drop-shadow(0 8px 12px rgba(236, 72, 153, 0.2));
+            pointer-events: none;
+        }
+
+        #modal-title {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            margin-bottom: 0.6rem;
+            color: #ec4899;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        #modal-desc {
+            color: #1e293b;
+            font-style: italic;
+            font-size: 1.3rem;
+            line-height: 1.5;
+            margin-top: 0.5rem;
+            padding-right: 20px;
+            font-weight: 300;
+        }
+
+        #modal-author {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #modal-author::before {
+            content: "";
+            width: 25px;
+            height: 1.5px;
+            background: #f1f5f9;
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 8%;
+            width: 100%;
+            text-align: center;
+            font-size: 0.6rem;
+            color: rgba(255, 192, 203, 0.4);
+            letter-spacing: 4px;
+            opacity: 0;
+            transition: opacity 2s;
+            pointer-events: none;
+        }
+
+        #moon-image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        #moon-image-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #moon-image-modal img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 20px;
+            border: 2px solid pink;
+        }
+
+        #white-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease-in;
+        }
+
+        #white-flash.active {
+            opacity: 1;
+        }
+
+        #final-logo-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 310;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        #final-logo-container.active {
+            opacity: 1;
+        }
+
+        #final-logo-container img {
+            width: 220px;
+            height: auto;
+            margin-bottom: 25px;
+        }
     </style>
 </head>
-<body>
+
+<body onclick="closeModal()">
 
     <audio id="bg-music" loop>
         <source src="https://almircsb.github.io/diamujer/ParaM.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="aurora-container"><div class="aurora"></div></div>
-    
-    <div class="moon" onclick="handleMoonClick()"></div>
-    
+    <div class="aurora-container">
+        <div class="aurora"></div>
+    </div>
+
+    <div class="moon" onclick="handleMoonClick(event)"></div>
+
     <div id="ambient-stars"></div>
+    <svg id="woman-silhouette-svg"></svg>
+
     <div id="shooting-stars-layer"></div>
-    <div id="asteroids-layer"></div>
 
     <div id="narrative-overlay">
         <h1 id="text-1" class="narrative-text cinzel text-white font-bold">
             A las educadoras de La Salle...<br>
-            <span class="text-[10px] font-normal text-pink-300 block mt-2 tracking-widest uppercase">8 de Marzo - Día de la Mujer</span>
+            <span class="text-[10px] font-normal text-pink-300 block mt-2 tracking-widest uppercase">8 de Marzo - Día de
+                la Mujer</span>
         </h1>
         <p id="text-2" class="narrative-text text-pink-100 italic">
             Ustedes son las arquitectas de sueños<br>y guías en el firmamento.
@@ -234,68 +740,95 @@
         <div id="stars-container"></div>
     </div>
 
+    <!-- Final Surprise Section -->
     <div id="final-quote">
-        <div class="bg-pink-950/40 backdrop-blur-xl p-10 rounded-[50px] border border-pink-200/10 shadow-2xl relative">
-            <!-- Rosa Animada SVG -->
-            <div class="animated-rose">
-                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50 35C45 20 20 20 20 40C20 60 50 85 50 85C50 85 80 60 80 40C80 20 55 20 50 35Z" fill="#ec4899"/>
-                    <path d="M50 45C48 38 35 38 35 48C35 58 50 72 50 72C50 72 65 58 65 48C65 38 52 38 50 45Z" fill="#f472b6"/>
-                    <path d="M50 85V95" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M50 90C50 90 60 85 65 82" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+        <div class="bg-pink-950/40 backdrop-blur-xl p-10 rounded-[50px] border border-pink-200/10 shadow-2xl relative"
+            onclick="event.stopPropagation()">
+            <div class="flower-container">
+                <div class="flower-center"></div>
+                <div class="flower-petal petal-1"></div>
+                <div class="flower-petal petal-2"></div>
+                <div class="flower-petal petal-3"></div>
+                <div class="flower-petal petal-4"></div>
+                <div class="flower-petal petal-5"></div>
             </div>
 
             <h2 class="cinzel text-pink-300 text-xs font-bold tracking-[0.3em] mb-4">8 DE MARZO</h2>
-            <p class="cinzel text-xl md:text-3xl text-white font-bold mb-4">
-                Luz y Corazón de La Salle
-            </p>
+            <p class="cinzel text-xl md:text-3xl text-white font-bold mb-4">Luz y Corazón de La Salle</p>
             <p class="text-pink-100 text-sm md:text-lg italic px-6 leading-relaxed">
-                "Su dedicación es el regalo más grande<br>
-                que nuestra comunidad recibe cada día."
+                "Su dedicación es el regalo más grande<br>que nuestra comunidad recibe cada día."
             </p>
             <div class="mt-8 pt-6 border-t border-pink-200/10">
-                <p id="blessing-text" class="cinzel text-sm text-yellow-300 font-bold tracking-[0.4em]">DIOS LAS BENDIGA</p>
+                <p class="cinzel text-sm text-yellow-300 font-bold tracking-[0.4em]">DIOS LAS BENDIGA</p>
             </div>
-            <button onclick="location.reload()" class="mt-8 text-[9px] tracking-[0.2em] text-pink-200/40 uppercase border border-pink-200/20 px-6 py-2 rounded-full hover:bg-pink-100/10 transition-colors">Volver al inicio</button>
+            <p class="mt-6 text-[10px] text-pink-300/60 uppercase tracking-widest animate-pulse">Mensajes de los
+                profesores...</p>
         </div>
     </div>
 
-    <div id="click-hint" class="hint uppercase">EXPLORA LA CONSTELACIÓN</div>
+    <!-- Professor Messages Layer -->
+    <div id="professors-carousel"></div>
 
-    <div id="moon-image-modal">
+    <div id="click-hint" class="hint uppercase">TOCA LAS ESTRELLAS O LA LUNA</div>
+
+    <div id="moon-image-modal" onclick="event.stopPropagation(); this.classList.remove('active')">
         <img src="https://almircsb.github.io/diamujer/Mujeres%20La%20Salle.png" alt="Mujeres La Salle">
     </div>
 
     <div id="white-flash"></div>
     <div id="final-logo-container">
-        <img src="https://boliviadigna.org/wp-content/uploads/2017/04/Logo-La-Salle-small.jpg" alt="Logo La Salle">
+        <img src="https://boliviadigna.org/wp-content/uploads/2017/04/Logo-La-Salle-small.jpg"
+            alt="Logo La Salle Bolivia">
         <p class="cinzel text-blue-900 font-bold tracking-[0.2em] text-sm">LA SALLE BOLIVIA</p>
     </div>
 
     <div id="paper-modal">
-        <div class="paper-card">
-            <button class="close-btn" onclick="closeModal()">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <div class="text-pink-400 text-2xl mb-2">❦</div>
-            <h2 id="modal-title" class="cinzel font-bold tracking-widest uppercase">Cualidad</h2>
-            <p id="modal-desc" class="text-slate-800 italic text-xl leading-snug px-2 font-medium"></p>
-            <div id="modal-author" class="mt-6 pt-4 border-t border-pink-50 cinzel text-[10px] text-pink-900 font-bold"></div>
+        <div class="paper-card" onclick="event.stopPropagation()">
+            <div id="child-icon" class="child-illustration"></div>
+            <div id="modal-title">Cualidad</div>
+            <p id="modal-desc"></p>
+            <div id="modal-author"></div>
+            <div class="close-instruction">Toca en cualquier parte para cerrar</div>
         </div>
     </div>
 
     <script>
+        const boyIllustrations = [
+            `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="55" r="35" fill="#FFDAB9"/><path d="M15 50 Q15 15 50 15 Q85 15 85 50" fill="#1e293b"/><path d="M15 45 L85 45 L95 55 L5 55 Z" fill="#3b82f6"/><circle cx="40" cy="60" r="3" fill="#333"/><circle cx="60" cy="60" r="3" fill="#333"/><path d="M42 75 Q50 82 58 75" stroke="#E57373" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+            `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="55" r="35" fill="#FFDAB9"/><circle cx="30" cy="30" r="12" fill="#4E342E"/><circle cx="50" cy="22" r="14" fill="#4E342E"/><circle cx="70" cy="30" r="12" fill="#4E342E"/><circle cx="22" cy="50" r="10" fill="#4E342E"/><circle cx="78" cy="50" r="10" fill="#4E342E"/><circle cx="40" cy="60" r="3" fill="#333"/><circle cx="60" cy="60" r="3" fill="#333"/><path d="M42 75 Q50 82 58 75" stroke="#E57373" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+            `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="55" r="35" fill="#FFDAB9"/><path d="M20 40 Q50 10 80 40" fill="#6d4c41"/><circle cx="38" cy="60" r="8" fill="none" stroke="#333" stroke-width="2"/><circle cx="62" cy="60" r="8" fill="none" stroke="#333" stroke-width="2"/><line x1="46" y1="60" x2="54" y2="60" stroke="#333" stroke-width="2"/><path d="M45 78 Q50 83 55 78" stroke="#E57373" stroke-width="2" fill="none"/></svg>`
+        ];
+
+        const girlIllustrations = [
+            `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="55" r="35" fill="#FFDAB9"/><path d="M15 55 Q15 10 50 10 Q85 10 85 55" fill="#3E2723"/><path d="M80 20 L95 10 L95 30 Z" fill="#ec4899"/><path d="M80 20 L65 10 L65 30 Z" fill="#ec4899"/><circle cx="40" cy="60" r="3" fill="#333"/><circle cx="60" cy="60" r="3" fill="#333"/><path d="M42 75 Q50 82 58 75" stroke="#F06292" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+            `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="40" r="15" fill="#5D4037"/><circle cx="80" cy="40" r="15" fill="#5D4037"/><circle cx="50" cy="55" r="35" fill="#FFDAB9"/><path d="M20 45 Q50 15 80 45" fill="#5D4037"/><circle cx="40" cy="60" r="3" fill="#333"/><circle cx="60" cy="60" r="3" fill="#333"/><path d="M42 75 Q50 82 58 75" stroke="#F06292" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+            `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="55" r="35" fill="#FFDAB9"/><path d="M15 55 Q15 20 50 20 Q85 20 85 55" fill="#8d6e63"/><circle cx="35" cy="25" r="6" fill="#fbbf24"/><circle cx="50" cy="20" r="6" fill="#f87171"/><circle cx="65" cy="25" r="6" fill="#fbbf24"/><circle cx="40" cy="60" r="3" fill="#333"/><circle cx="60" cy="60" r="3" fill="#333"/><path d="M42 75 Q50 82 58 75" stroke="#F06292" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`
+        ];
+
+        const lasalleIcon = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 10 L61 35 L89 35 L67 52 L75 79 L50 62 L25 79 L33 52 L11 35 L39 35 Z" fill="#FFD700" stroke="#B8860B" stroke-width="2"/></svg>`;
+
+        const womanPoints = [
+            { x: 48, y: 15 }, { x: 55, y: 18 }, { x: 58, y: 25 }, { x: 57, y: 32 }, { x: 55, y: 35 }, { x: 57, y: 38 }, { x: 53, y: 42 }, { x: 48, y: 48 }, { x: 52, y: 60 }, { x: 55, y: 75 }, { x: 40, y: 80 }, { x: 32, y: 72 }, { x: 30, y: 60 }, { x: 28, y: 45 }, { x: 25, y: 30 }, { x: 30, y: 20 }, { x: 40, y: 14 }, { x: 48, y: 15 }
+        ];
+
         const starsData = [
-            { id: 1, name: 'Paciencia Infinita', desc: '"Gracias por no rendirte conmigo cuando no entendía las letras. Me esperaste con una sonrisa."', author: '— Mateo, 7 años', x: 25, y: 40 },
-            { id: 2, name: 'Firmeza Dulce', desc: '"Me enseñaste que los límites son para protegernos. Gracias por decirme que no con amor."', author: '— Sofía, 10 años', x: 45, y: 30 },
-            { id: 3, name: 'Humildad', desc: '"Me sorprendió verte agachada a mi altura. Me enseñaste que los grandes saben ser pequeños."', author: '— Lucas, 8 años', x: 65, y: 25 },
-            { id: 4, name: 'Escucha Atenta', desc: '"Aquel día triste, me viste aunque no dije nada. Gracias por escuchar mis silencios."', author: '— Luciana, 12 años', x: 82, y: 45 },
-            { id: 5, name: 'Creatividad Mágica', desc: '"Tus clases son viajes. Gracias por enseñarme que con imaginación todo es posible."', author: '— Kevin, 11 años', x: 75, y: 70 },
-            { id: 6, name: 'Ternura', desc: '"Me equivoqué, pero me explicaste con tanto cariño que quise ser mejor persona."', author: '— Diego, 9 años', x: 55, y: 80 },
-            { id: 7, name: 'Disciplina', desc: '"Gracias por enseñarme que el esfuerzo es la llave. Hoy soy fuerte porque tú estuviste ahí."', author: '— Valentina, 15 años', x: 35, y: 75 },
-            { id: 8, name: 'Inspiración', desc: '"Me pides mucho porque sabes que puedo dar mucho. Gracias por soñar en grande por mí."', author: '— Gabriel, 11 años', x: 18, y: 62 },
-            { id: 9, name: 'Vocación de Mujer', desc: 'Ustedes son el corazón que late en cada aula. Su luz es el orgullo de La Salle Bolivia.', author: 'Feliz 8 de Marzo', x: 50, y: 55, isSpecial: true }
+            { id: 1, name: 'Paciencia Infinita', gender: 'boy', desc: '"Gracias por no rendirte conmigo cuando no entendía las letras. Me esperaste con una sonrisa."', author: 'Mateo, 7 años', x: 20, y: 35 },
+            { id: 2, name: 'Firmeza Dulce', gender: 'girl', desc: '"Me enseñaste que los límites son para protegernos. Gracias por decirme que no con amor."', author: 'Sofía, 10 años', x: 42, y: 25 },
+            { id: 3, name: 'Humildad', gender: 'boy', desc: '"Me sorprendió verte agachada a mi altura. Me enseñaste que los grandes saben ser pequeños."', author: 'Lucas, 8 años', x: 70, y: 20 },
+            { id: 4, name: 'Escucha Atenta', gender: 'girl', desc: '"Aquel día triste, me viste aunque no dije nada. Gracias por escuchar mis silencios."', author: 'Luciana, 12 años', x: 85, y: 45 },
+            { id: 5, name: 'Creatividad Mágica', gender: 'boy', desc: '"Tus clases son viajes. Gracias por enseñarme que con imaginación todo es posible."', author: 'Kevin, 11 años', x: 75, y: 75 },
+            { id: 6, name: 'Ternura', gender: 'boy', desc: '"Me equivoqué, pero me explicaste con tanto cariño que quise ser mejor persona."', author: 'Diego, 9 años', x: 50, y: 85 },
+            { id: 7, name: 'Disciplina', gender: 'girl', desc: '"Gracias por enseñarme que el esfuerzo es la llave. Hoy soy fuerte porque tú estuviste ahí."', author: 'Valentina, 15 años', x: 28, y: 80 },
+            { id: 8, name: 'Inspiración', gender: 'boy', desc: '"Me pides mucho porque sabes que puedo dar mucho. Gracias por soñar en grande por mí."', author: 'Gabriel, 11 años', x: 12, y: 60 },
+            { id: 9, name: 'Vocación de Mujer', gender: 'special', desc: 'Ustedes son el corazón que late en cada aula. Su luz es el orgullo de La Salle Bolivia.', author: 'Feliz 8 de Marzo', x: 50, y: 55, isSpecial: true }
+        ];
+
+        const professorMessages = [
+            { text: "Felicitación a todas nuestras estudiantes y docentes, hoy reconocemos la fortaleza, dedicación, inteligencia y compromiso que cada una de ustedes aporta a nuestra universidad. ¡Muchas felicidades!", author: "Lic. Nelson Condori." },
+            { text: "Admiro la capacidad que tienen para encontrar luz en los días grises de los estudiantes. Son inspiración pura.", author: "Lic. Gastón Flor Ameller" },
+            { text: "La educación lasallista no sería la misma sin la sensibilidad y fuerza que ustedes aportan cada día.", author: "Lic. Jhonny Aguilar" },
+            { text: "Verlas trabajar es aprender que la excelencia y la empatía pueden caminar de la mano perfectamente.", author: "Lic. Iadov Linker Quiroga" },
+            { text: "Feliz día a quienes hacen que lo imposible parezca sencillo con solo una palabra de aliento.", author: "Lic. Paul Romero" }
         ];
 
         let starsRead = new Set();
@@ -307,18 +840,16 @@
             });
         }
 
-        function handleMoonClick() {
+        function handleMoonClick(e) {
+            e.stopPropagation();
             const moonModal = document.getElementById('moon-image-modal');
             const whiteFlash = document.getElementById('white-flash');
             const logoContainer = document.getElementById('final-logo-container');
-            
             moonModal.classList.add('active');
-            
             setTimeout(() => {
                 moonModal.classList.remove('active');
                 whiteFlash.classList.add('active');
                 document.body.classList.add('white-out');
-                
                 setTimeout(() => {
                     logoContainer.classList.add('active');
                     setTimeout(() => {
@@ -329,7 +860,27 @@
                         }, 1000);
                     }, 1500);
                 }, 1000);
-            }, 5000); 
+            }, 5000);
+        }
+
+        function drawWomanSilhouette() {
+            const svg = document.getElementById('woman-silhouette-svg');
+            const container = document.getElementById('ambient-stars');
+            let d = `M ${womanPoints[0].x}% ${womanPoints[0].y}%`;
+
+            womanPoints.forEach((p, i) => {
+                const s = document.createElement('div');
+                s.className = 'woman-silhouette-star';
+                s.style.left = p.x + '%'; s.style.top = p.y + '%';
+                s.style.animation = `twinkle ${2 + Math.random() * 3}s infinite alternate`;
+                container.appendChild(s);
+                if (i > 0) d += ` L ${p.x}% ${p.y}%`;
+            });
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', d);
+            path.setAttribute('class', 'woman-silhouette-line');
+            svg.appendChild(path);
         }
 
         function spawnShootingStar() {
@@ -343,92 +894,62 @@
             setTimeout(() => star.remove(), 2000);
         }
 
-        function spawnRocketAsteroid() {
-            const layer = document.getElementById('asteroids-layer');
-            const ast = document.createElement('div');
-            ast.className = 'asteroid';
-            
-            const startY = Math.random() * 80 + 10;
-            const diffY = (Math.random() * 100 - 50);
-            const rot = Math.atan2(diffY, window.innerWidth) * (180 / Math.PI);
-            
-            ast.style.top = startY + '%';
-            ast.style.setProperty('--dy', diffY + 'px');
-            ast.style.setProperty('--rot', rot + 'deg');
-            ast.style.animation = 'rocket-move 3s linear forwards';
-            
-            ast.innerHTML = `
-                <div class="asteroid-trail"></div>
-                <div class="asteroid-body"></div>
-            `;
-            
-            layer.appendChild(ast);
-            setTimeout(() => ast.remove(), 3500);
-        }
-
         function init() {
             const starCont = document.getElementById('ambient-stars');
             const svg = document.getElementById('constellation-svg');
             const starsLayer = document.getElementById('stars-container');
 
             tryPlayMusic();
-            
-            // Ciclo de asteroides: uno a la vez
-            setInterval(spawnRocketAsteroid, 5000);
+            drawWomanSilhouette();
             setInterval(spawnShootingStar, 8000);
 
-            for(let i=0; i<150; i++){
+            for (let i = 0; i < 120; i++) {
                 const s = document.createElement('div');
                 s.className = 'tiny-star';
-                s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
-                s.style.width = s.style.height = (Math.random()*1.5 + 0.5)+'px';
-                s.style.setProperty('--duration', (Math.random()*4+2)+'s');
-                s.style.animationDelay = Math.random()*5+'s';
+                s.style.left = Math.random() * 100 + '%'; s.style.top = Math.random() * 100 + '%';
+                s.style.width = s.style.height = (Math.random() * 1.5 + 0.5) + 'px';
+                s.style.setProperty('--duration', (Math.random() * 4 + 2) + 's');
+                s.style.animationDelay = Math.random() * 5 + 's';
                 starCont.appendChild(s);
             }
 
             starsData.forEach((s, i) => {
-                if(i < starsData.length - 1) {
-                    const next = starsData[(i+1)% (starsData.length - 1)];
-                    const l = document.createElementNS('http://www.w3.org/2000/svg','line');
-                    l.setAttribute('x1', s.x+'%'); l.setAttribute('y1', s.y+'%');
-                    l.setAttribute('x2', next.x+'%'); l.setAttribute('y2', next.y+'%');
-                    l.setAttribute('class','constellation-line'); l.id = 'line-'+i;
+                if (i < starsData.length - 1) {
+                    const next = starsData[(i + 1) % (starsData.length - 1)];
+                    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    l.setAttribute('x1', s.x + '%'); l.setAttribute('y1', s.y + '%');
+                    l.setAttribute('x2', next.x + '%'); l.setAttribute('y2', next.y + '%');
+                    l.setAttribute('class', 'constellation-line'); l.id = 'line-' + i;
                     svg.appendChild(l);
                 }
-
                 const hb = document.createElement('div');
-                hb.className = 'star-hitbox'; hb.style.left = s.x+'%'; hb.style.top = s.y+'%';
-                hb.onclick = () => openModal(s, i);
-
+                hb.className = 'star-hitbox'; hb.style.left = s.x + '%'; hb.style.top = s.y + '%';
+                hb.onclick = (e) => { e.stopPropagation(); openModal(s, i); };
                 const st = document.createElement('div');
-                st.className = `main-star ${s.isSpecial?'special':''}`; st.id = 'star-'+i;
-
+                st.className = `main-star ${s.isSpecial ? 'special' : ''}`; st.id = 'star-' + i;
                 const lb = document.createElement('div');
-                lb.className = 'star-label'; lb.id = 'label-'+i; lb.innerText = s.name;
-
+                lb.className = 'star-label'; lb.id = 'label-' + i; lb.innerText = s.name;
                 hb.appendChild(st); hb.appendChild(lb);
                 starsLayer.appendChild(hb);
             });
-
             setTimeout(runSequence, 1000);
         }
 
         async function runSequence() {
             const sleep = ms => new Promise(r => setTimeout(r, ms));
-            for(let i=1; i<=4; i++){
-                const t = document.getElementById('text-'+i);
-                if(!t) continue;
+            for (let i = 1; i <= 4; i++) {
+                const t = document.getElementById('text-' + i);
+                if (!t) continue;
                 t.classList.add('show');
-                if(i===2){
-                    for(let j=0; j<starsData.length; j++){
-                        document.getElementById('star-'+j).classList.add('visible');
-                        document.getElementById('label-'+j).classList.add('visible');
-                        if(j<starsData.length-1) document.getElementById('line-'+j).classList.add('line-draw');
-                        await sleep(250);
+                if (i === 2) {
+                    for (let j = 0; j < starsData.length; j++) {
+                        document.getElementById('star-' + j).classList.add('visible');
+                        document.getElementById('label-' + j).classList.add('visible');
+                        if (j < starsData.length - 1) document.getElementById('line-' + j).classList.add('line-draw');
+                        await sleep(200);
                     }
                 }
-                await sleep(3500); t.classList.remove('show'); await sleep(800);
+                await sleep(3000); t.classList.remove('show'); await sleep(800);
             }
             document.getElementById('click-hint').style.opacity = '1';
         }
@@ -437,35 +958,98 @@
             document.getElementById('modal-title').innerText = s.name;
             document.getElementById('modal-desc').innerText = s.desc;
             document.getElementById('modal-author').innerText = s.author;
+
+            const iconCont = document.getElementById('child-icon');
+            if (s.gender === 'boy') {
+                iconCont.innerHTML = boyIllustrations[index % boyIllustrations.length];
+            } else if (s.gender === 'girl') {
+                iconCont.innerHTML = girlIllustrations[index % girlIllustrations.length];
+            } else {
+                iconCont.innerHTML = lasalleIcon;
+            }
+
             document.getElementById('paper-modal').classList.add('open');
             document.getElementById('constellation-layer').classList.add('darken-back');
             document.getElementById('click-hint').style.opacity = '0';
-            
+
             starsRead.add(index);
-            document.getElementById('star-'+index).classList.add('read');
-            
-            if(starsRead.size === starsData.length) {
+            document.getElementById('star-' + index).classList.add('read');
+
+            if (starsRead.size === starsData.length) {
                 setTimeout(showFinalSurprise, 1500);
             }
         }
 
-        function showFinalSurprise() {
+        async function showFinalSurprise() {
             closeModal();
-            document.getElementById('final-quote').classList.add('show');
+            const finalQuote = document.getElementById('final-quote');
+            finalQuote.classList.add('show');
             document.getElementById('constellation-layer').classList.add('darken-back');
+
+            // Wait 10 seconds for user to read final main message
+            await new Promise(r => setTimeout(r, 10000));
+
+            finalQuote.classList.add('fade-out');
+            await new Promise(r => setTimeout(r, 1200));
+            finalQuote.style.display = 'none';
+
+            startProfessorMessages();
+        }
+
+        async function startProfessorMessages() {
+            const container = document.getElementById('professors-carousel');
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+            for (let i = 0; i < professorMessages.length; i++) {
+                const msg = professorMessages[i];
+                const card = document.createElement('div');
+                card.className = 'prof-card';
+                card.innerHTML = `
+                    <div class="mb-6"><svg class="w-10 h-10 mx-auto text-pink-400 opacity-40" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11.5L12.017 11.5V9C12.017 7.34315 13.3601 6 15.017 6H19.017C20.6738 6 22.017 7.34315 22.017 9V15C22.017 16.6569 20.6738 18 19.017 18H17.017L17.017 21H14.017ZM2.017 21L2.017 18C2.017 16.8954 2.91243 16 4.017 16H7.017C7.56928 16 8.017 15.5523 8.017 15V9C8.017 8.44772 7.56928 8 7.017 8H3.017C2.46472 8 2.017 8.44772 2.017 9V11.5L0.017 11.5V9C0.017 7.34315 1.36015 6 3.017 6H7.017C8.67385 6 10.017 7.34315 10.017 9V15C10.017 16.6569 8.67385 18 7.017 18H5.017L5.017 21H2.017Z"/></svg></div>
+                    <p class="text-white text-base md:text-xl italic leading-relaxed mb-8 font-light tracking-wide px-2">"${msg.text}"</p>
+                    <div class="flex items-center justify-center gap-4">
+                        <span class="h-px w-6 bg-pink-500/50"></span>
+                        <p class="cinzel text-pink-300 text-[10px] md:text-xs font-bold tracking-widest uppercase">${msg.author}</p>
+                        <span class="h-px w-6 bg-pink-500/50"></span>
+                    </div>
+                `;
+                container.appendChild(card);
+
+                await sleep(50);
+                card.classList.add('active');
+                await sleep(5000); // 5 seconds display
+                card.classList.remove('active');
+                card.classList.add('exit');
+                await sleep(1200);
+                card.remove();
+            }
+
+            // Habilitar clics en el contenedor para el botón final
+            container.classList.add('active-events');
+
+            const finalNode = document.createElement('div');
+            finalNode.className = 'text-center animate-bounce';
+            finalNode.innerHTML = `
+                <button onclick="location.reload()" class="repeat-btn">REPETIR EXPERIENCIA</button>
+            `;
+            container.appendChild(finalNode);
         }
 
         function closeModal() {
-            document.getElementById('paper-modal').classList.remove('open');
-            if(!document.getElementById('final-quote').classList.contains('show')) {
-                document.getElementById('constellation-layer').classList.remove('darken-back');
-                setTimeout(() => {
-                    if (starsRead.size < starsData.length) document.getElementById('click-hint').style.opacity = '1';
-                }, 500);
+            const modal = document.getElementById('paper-modal');
+            if (modal.classList.contains('open')) {
+                modal.classList.remove('open');
+                if (!document.getElementById('final-quote').classList.contains('show')) {
+                    document.getElementById('constellation-layer').classList.remove('darken-back');
+                    setTimeout(() => {
+                        if (starsRead.size < starsData.length) document.getElementById('click-hint').style.opacity = '1';
+                    }, 500);
+                }
             }
         }
 
         window.onload = init;
     </script>
 </body>
+
 </html>
