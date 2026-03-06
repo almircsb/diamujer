@@ -1058,7 +1058,7 @@
                 const scrollHeight = scrollContent.offsetHeight;
                 const containerHeight = scrollContainer.offsetHeight;
 
-                let extraWait = 5000; // Tiempo base
+                let extraWait = 7000; // Tiempo base
 
                 if (scrollHeight > containerHeight) {
                     const scrollDistance = scrollHeight - containerHeight;
@@ -1066,7 +1066,7 @@
                     extraWait = scrollDuration + 7000; // Añadir tiempo para lectura inicial y final
 
                     // Esperar 2 segundos antes de empezar el scroll
-                    await sleep(2000);
+                    await sleep(3000);
                     scrollContent.style.transitionDuration = `${scrollDuration}ms`;
                     scrollContent.style.transform = `translateY(-${scrollDistance}px)`;
                     await sleep(scrollDuration + 5000);
@@ -1076,7 +1076,7 @@
 
                 card.classList.remove('active');
                 card.classList.add('exit');
-                await sleep(2700);
+                await sleep(3000);
                 card.remove();
             }
 
@@ -1108,6 +1108,7 @@
 </body>
 
 </html>
+
 
 
 
