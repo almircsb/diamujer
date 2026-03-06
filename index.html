@@ -974,7 +974,7 @@
                         await sleep(200);
                     }
                 }
-                await sleep(4000); t.classList.remove('show'); await sleep(800);
+                await sleep(4500); t.classList.remove('show'); await sleep(900);
             }
             document.getElementById('click-hint').style.opacity = '1';
         }
@@ -1058,12 +1058,12 @@
                 const scrollHeight = scrollContent.offsetHeight;
                 const containerHeight = scrollContainer.offsetHeight;
 
-                let extraWait = 10000; // Tiempo base
+                let extraWait = 11000; // Tiempo base
 
                 if (scrollHeight > containerHeight) {
                     const scrollDistance = scrollHeight - containerHeight;
                     const scrollDuration = scrollDistance * 70; // 50ms por pixel de scroll
-                    extraWait = scrollDuration + 7000; // Añadir tiempo para lectura inicial y final
+                    extraWait = scrollDuration + 8000; // Añadir tiempo para lectura inicial y final
 
                     // Esperar 2 segundos antes de empezar el scroll
                     await sleep(3000);
@@ -1108,6 +1108,7 @@
 </body>
 
 </html>
+
 
 
 
