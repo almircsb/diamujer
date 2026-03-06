@@ -1058,7 +1058,7 @@
                 const scrollHeight = scrollContent.offsetHeight;
                 const containerHeight = scrollContainer.offsetHeight;
 
-                let extraWait = 9000; // Tiempo base
+                let extraWait = 10000; // Tiempo base
 
                 if (scrollHeight > containerHeight) {
                     const scrollDistance = scrollHeight - containerHeight;
@@ -1076,7 +1076,7 @@
 
                 card.classList.remove('active');
                 card.classList.add('exit');
-                await sleep(4000);
+                await sleep(4500);
                 card.remove();
             }
 
@@ -1108,6 +1108,7 @@
 </body>
 
 </html>
+
 
 
 
